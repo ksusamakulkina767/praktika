@@ -1,78 +1,67 @@
 ﻿using System;
-class Notification
+
+class Notification // уведомление
 {
-    // Событие сообщения
+    // метод который передает события 
+    // Событие для текстового сообщения
     public event Action<string> Message;
 
-    // Событие звонка
+    // Создать событие Call, которое передаёт номер телефона.  
     public event Action<string> Call;
 
-    // Событие электронной почты
+    // Событие для электронной почты
     public event Action<string> Email;
 
     // Метод отправки сообщения
     public void SendMessage(string text)
     {
-        // Вызов события сообщения
+        // Вызов события и передача текста
         Message?.Invoke(text);
     }
 
     // Метод отправки звонка
     public void SendCall(string number)
     {
-        // Вызов события звонка
+        // Вызов события и передача номера
         Call?.Invoke(number);
     }
 
-    // Метод отправки электронной почты
+    // Метод отправки письма
     public void SendEmail(string text)
     {
-        // Вызов события электронной почты
+        // Вызов события и передача текста письма
         Email?.Invoke(text);
     }
 }
+
 class Program
 {
-    // Обработчик события сообщения
-    static void MessageHandler(string text)
-    {
-        Console.WriteLine("Сообщение: " + text);
-    }
-
-    // Обработчик события звонка
-    static void CallHandler(string number)
-    {
-        Console.WriteLine("Звонок от: " + number);
-    }
-
-    // Обработчик события электронной почты
-    static void EmailHandler(string text)
-    {
-        Console.WriteLine("Письмо: " + text);
-    }
 
     static void Main()
     {
-        // Создание объекта уведомления
-        Notification notification = new Notification();
+        // Создание объекта уведомлений
+        Notification n = new Notification();
 
-        // Регистрация обработчика сообщения
-        notification.Message += MessageHandler;
+        // При возникновении события выводится текст сообщения
+        // Когда произойдёт событие Message, вывести сообщение на экран
+        n.Message += text => Console.WriteLine("Сообщение: " + text);
 
-        // Регистрация обработчика звонка
-        notification.Call += CallHandler;
+        // Подписка на событие звонка
+        // При возникновении события выводится номер телефона
+        n.Call += number => Console.WriteLine("Звонок: " + number);
 
-        // Регистрация обработчика электронной почты
-        notification.Email += EmailHandler;
+        // Подписка на событие письма
+        // При возникновении события выводится текст письма
+        n.Email += text => Console.WriteLine("Письмо: " + text);
 
-        // Проверка события сообщения
-        notification.SendMessage("Привет!");
+        // Отправка сообщения
+        n.SendMessage("Привет!");
 
-        // Проверка события звонка
-        notification.SendCall("375291234567");
+        // Отправка звонка
+        n.SendCall("375291234567");
 
-        // Проверка события электронной почты
-        notification.SendEmail("Новое письмо");
+        // Отправка письма
+        n.SendEmail("Новое письмо");
     }
 }
 
