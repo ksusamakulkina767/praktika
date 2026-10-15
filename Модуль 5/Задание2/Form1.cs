@@ -1,76 +1,66 @@
-using System; 
-using System.IO; 
-using System.Windows.Forms; 
+using System;
+using System.Windows.Forms;
 
-namespace Задание2 
+namespace Задание2
 {
-    public partial class Form1 : Form 
+    public partial class Form1 : Form
     {
-        // Переменная для хранения пути к файлу
-        // объявление пустой строковой переменной
-        string filePath = "";
+        // Создаем объект менеджера, который отвечает за чтение, запись и хранение пути к файлу
+        private FileManager fileManager = new FileManager();
+
         public Form1()
         {
-            InitializeComponent(); // Создание элементов формы
+            InitializeComponent();
         }
 
-        // Метод открытия файла
+        // Открытие существующего файла
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Создание диалогового окна для выбора файла
+            // Настраиваем диалоговое окно для выбора текстового файла
             OpenFileDialog open = new OpenFileDialog();
-
-            // Установка фильтра для текстовых файлов
             open.Filter = "Текстовые файлы (*.txt)|*.txt";
 
-            // Проверка, выбрал ли пользователь файл и нажал ли «ОК»
+            // Если пользователь выбрал файл и нажал «Открыть»
             if (open.ShowDialog() == DialogResult.OK)
             {
-                // Сохранение пути к выбранному файлу
-                filePath = open.FileName;
-
-                // Чтение текста из файла и отображение в поле
-                richTextBox1.Text = File.ReadAllText(filePath);
+                // Читаем текст через менеджер и выводим его на экран в richTextBox1
+                richTextBox1.Text = fileManager.OpenFile(open.FileName);
             }
         }
 
-        // Метод сохранения файла
+        // Сохранение файла
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // Проверка, выбран ли ранее файл для сохранения
-            if (filePath == "")
+            // Если путь к файлу еще не задан (файл новый), спрашиваем, куда его сохранить
+            if (string.IsNullOrEmpty(fileManager.GetFilePath()))
             {
-                // Создание диалогового окна для сохранения файла
                 SaveFileDialog save = new SaveFileDialog();
-
-                // Установка фильтра для текстовых файлов
                 save.Filter = "Текстовые файлы (*.txt)|*.txt";
 
-                // Проверка, подтвердил ли пользователь сохранение
+                // Если пользователь передумал сохранять и нажал «Отмена» — выходим
                 if (save.ShowDialog() != DialogResult.OK)
-                    return; // Завершение метода, если сохранение отменено
+                    return;
 
-                // Сохранение выбранного пути к файлу
-                filePath = save.FileName;
+                // Запоминаем путь, который выбрал пользователь
+                fileManager.SetFilePath(save.FileName);
             }
 
-            // Запись текста из поля в файл
-            File.WriteAllText(filePath, richTextBox1.Text);
+            // Записываем текст из текстового поля в файл через менеджер
+            fileManager.SaveFile(richTextBox1.Text);
 
-            // Вывод сообщения об успешном сохранении
+            // Сообщение об успешном сохранении
             MessageBox.Show("Файл сохранён!");
         }
 
-        // Метод выхода из программы
+        // Выход из программы
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Application.Exit(); 
+            Application.Exit();
         }
 
-        // Метод, который вызывается при загрузке формы
+        // Событие загрузки формы (остается пустым)
         private void Form1_Load(object sender, EventArgs e)
         {
-           
         }
     }
 }
