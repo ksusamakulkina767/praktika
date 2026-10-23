@@ -1,0 +1,55 @@
+﻿<Window x:Class="ProjectManagementApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Управление задачами и проектами" Height="600" Width="900" WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Блок создания проекта -->
+        <GroupBox Header="Проекты" Grid.Row="0" Margin="0,0,0,10" Padding="5">
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="ProjectNameTextBox" Width="250" Height="25" Margin="0,0,10,0" ToolTip="Название проекта"/>
+                <Button Content="Добавить проект" Width="130" Height="25" Click="AddProject_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Блок создания и настройки задачи (Требования: приоритет, дата, прогресс) -->
+        <GroupBox Header="Управление задачами" Grid.Row="1" Margin="0,0,0,10" Padding="5">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                    <TextBox x:Name="TaskTitleTextBox" Width="200" Height="25" Margin="0,0,10,0" ToolTip="Название задачи"/>
+                    <ComboBox x:Name="ProjectsComboBox" Width="160" Height="25" Margin="0,0,10,0" DisplayMemberPath="Название проекта" SelectedValuePath="Код" ToolTip="Проект"/>
+
+                    <!-- Выбор приоритета -->
+                    <ComboBox x:Name="PriorityComboBox" Width="110" Height="25" Margin="0,0,10,0" ToolTip="Приоритет">
+                        <ComboBoxItem Content="Низкий"/>
+                        <ComboBoxItem Content="Средний" IsSelected="True"/>
+                        <ComboBoxItem Content="Высокий"/>
+                    </ComboBox>
+
+                    <!-- Выбор даты выполнения -->
+                    <DatePicker x:Name="TaskDatePicker" Width="130" Height="25" Margin="0,0,10,0" ToolTip="Срок выполнения"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Добавить задачу" Width="140" Height="25" Click="AddTask_Click" Margin="0,0,10,0"/>
+                    <Button Content="Удалить задачу" Width="130" Height="25" Click="DeleteTask_Click" Background="#FFF0F0"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Таблица задач -->
+        <DataGrid x:Name="TasksDataGrid" Grid.Row="2" IsReadOnly="True" Margin="0,0,0,10" AutoGenerateColumns="True"/>
+
+        <!-- Кнопки управления статусом и отчетами -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal">
+            <Button Content="Отметить выполненной" Width="160" Height="30" Click="CompleteTask_Click" Margin="0,0,10,0"/>
+            <Button Content="Сформировать отчет" Width="150" Height="30" Click="ShowReport_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>
